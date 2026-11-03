@@ -7,13 +7,27 @@ import express, {
   type Response,
 } from "express";
 
+import rateLimit from "express-rate-limit";
+
 import { testConnection } from "./config/database.js";
-import { ensureUsersTableExists } from "./services/user.service.js";
 import authRoutes from "./routes/auth.routes.js";
+import { errorResponse } from "./utils/apiResponse.js";
 
 dotenv.config();
 
 const app: Express = express();
+const rateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 100, 
+  handler: (_req, res) => {
+    res.status(429).json(
+      errorResponse(
+        "Too many requests from this IP, please try again later.",
+        "TOO_MANY_REQUESTS"
+      )
+    );
+  },
+});
 
 const port = Number(process.env.PORT ?? 5000);
 const baseUrl = process.env.BASE_URL ?? `http://localhost:${port}`;
@@ -23,6 +37,7 @@ const apiPrefix = `/api/${version}`;
 
 app.use(cors());
 app.use(express.json());
+app.use(rateLimiter);
 
 // Health check
 app.get("/health", (_req: Request, res: Response) => {
