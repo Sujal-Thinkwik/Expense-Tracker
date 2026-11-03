@@ -33,8 +33,8 @@ const SignInForm = () => {
 
   const onSubmit = async (values: SignInFormValues) => {
     try {
-      const result = await signIn(values).unwrap();
-      toast.success(result?.message || "Signed in successfully");
+      const response = await signIn(values).unwrap();
+      toast.success(response?.message || "Signed in successfully");
       reset();
     } catch (error: unknown) {
       const errorMessage =

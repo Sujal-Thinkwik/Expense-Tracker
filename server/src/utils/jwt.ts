@@ -41,17 +41,6 @@ export const generateRefreshToken = (userId: string): string => {
   );
 };
 
-export const getTokenExpiry = () => {
-  const now = Date.now();
-
-  return {
-    accessTokenExpiresIn: ACCESS_TOKEN_EXPIRES_IN,
-    refreshTokenExpiresIn: REFRESH_TOKEN_EXPIRES_IN,
-    accessTokenExpiresAt: new Date(
-      now + ACCESS_TOKEN_EXPIRES_IN * 1000
-    ).toISOString(),
-    refreshTokenExpiresAt: new Date(
-      now + REFRESH_TOKEN_EXPIRES_IN * 1000
-    ).toISOString(),
-  };
+export const getTokenExpiry = (): number => {
+  return ACCESS_TOKEN_EXPIRES_IN;
 };
