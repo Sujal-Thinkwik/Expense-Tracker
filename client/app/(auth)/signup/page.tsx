@@ -1,9 +1,7 @@
-import AuthForm from "@/components/auth/AuthFlow"
+import SignUpForm from "@/components/auth/SignUpForm";
 
 const page = () => {
-  return (
-    <AuthForm mode='signup' />
-  )
-}
+  return <SignUpForm />;
+};
 
-export default page
+export default page;

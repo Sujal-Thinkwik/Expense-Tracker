@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '@/store';
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://api.github.com',
+  baseUrl: import.meta.env.BASE_URL ?? 'http://localhost:5000/api/v1',
   prepareHeaders: (headers, { getState }) => {
     // Add auth mechanism to pass tokens to the header
     const token = (getState as unknown as RootState)?.app?.auth?.token;
@@ -15,9 +15,12 @@ export const baseQuery = fetchBaseQuery({
   }
 });
 
+
+const tags = ['GET_ALL_REPO'] ;
+
 export const apiService = createApi({
   baseQuery: baseQuery,
-  tagTypes: ['GET_ALL_REPO'],
+  tagTypes: tags,
   refetchOnReconnect: true,
   endpoints: () => ({})
 });
