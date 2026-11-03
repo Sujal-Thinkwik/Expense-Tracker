@@ -18,8 +18,10 @@ import {
 } from "./auth.schema";
 import { useSignInMutation } from "@/services/auth.service";
 import { toast } from "sonner";
+import { useRouter } from 'next/navigation' 
 
 const SignInForm = () => {
+  const router = useRouter();
   const [signIn, { isLoading: isSigningIn }] = useSignInMutation();
   const {
     control,
@@ -36,6 +38,7 @@ const SignInForm = () => {
       const response = await signIn(values).unwrap();
       toast.success(response?.message || "Signed in successfully");
       reset();
+      router.push("/dashboard");
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" && error !== null && "data" in error
