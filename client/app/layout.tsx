@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 
 import "@mantine/core/styles.css";
 import "./globals.css";
 
-import { Box, MantineProvider } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
+import ReduxProvider from "@/providers/ReduxProvider";
 import { theme } from "@/theme/color";
 
 const geistSans = Geist({
@@ -30,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <MantineProvider theme={theme}>
-          {children}
+            <ReduxProvider>{children}</ReduxProvider>
         </MantineProvider>
       </body>
     </html>

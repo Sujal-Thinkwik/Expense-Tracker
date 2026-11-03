@@ -18,25 +18,29 @@ app.get("/health", (_req, res) => {
 });
 // API routes
 app.use(`${apiPrefix}/auth`, authRoutes);
-// Database health check
-app.get("/db-health", async (_req, res) => {
+const validateDatabaseConnection = async () => {
     const dbConnected = await testConnection();
     if (!dbConnected) {
+        throw new Error("Unable to connect to the database");
+    }
+};
+// Database health check
+app.get("/db-health", async (_req, res) => {
+    try {
+        await validateDatabaseConnection();
+        res.json({ status: "ok" });
+    }
+    catch (_error) {
         res.status(500).json({
             status: "error",
             message: "Database connection failed",
         });
-        return;
     }
-    res.json({ status: "ok" });
 });
 // Server initialization
 const startServer = async () => {
     try {
-        const dbConnected = await testConnection();
-        if (!dbConnected) {
-            throw new Error("Unable to connect to the database");
-        }
+        await validateDatabaseConnection();
         await ensureUsersTableExists();
         app.listen(port, () => {
             console.log(`Server running at ${baseUrl}`);

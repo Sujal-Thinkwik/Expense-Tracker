@@ -12,6 +12,7 @@ declare global {
   interface ImportMetaEnv {
     readonly VITE_PERSIST_KEY?: string;
     readonly PERSIST_KEY?: string;
+    readonly NEXT_PUBLIC_API_BASE_URL?: string;
   }
 }
 

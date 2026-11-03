@@ -12,16 +12,22 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useState } from "react";
+import { useSignUpMutation } from "@/services/auth.service";
 import {
   SIGN_UP_INITIAL_VALUES,
   SignUpFormValues,
   signUpSchema,
 } from "./auth.schema";
+import { toast } from "sonner";
 
 const SignUpForm = () => {
+  const [signUp, { isLoading: isSigningUp }] = useSignUpMutation();
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -29,7 +35,23 @@ const SignUpForm = () => {
   });
 
   const onSubmit = async (values: SignUpFormValues) => {
-    console.log({ values });
+    try {
+      const result = await signUp(values).unwrap();
+      toast.success(result?.message || "User created successfully");
+      reset();
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" && error !== null && "data" in error
+          ? (error as { data?: { message?: string } }).data?.message
+          : undefined;
+
+      toast.error(
+        errorMessage ||
+          (error instanceof Error
+            ? error.message
+            : "Something went wrong while signing up.")
+      );
+    }
   };
 
   return (
@@ -106,7 +128,12 @@ const SignUpForm = () => {
           )}
         />
 
-        <Button type="submit" color="primary" fullWidth loading={isSubmitting}>
+        <Button
+          type="submit"
+          color="primary"
+          fullWidth
+          loading={isSubmitting || isSigningUp}
+        >
           Create Account
         </Button>
       </Stack>
@@ -127,6 +154,6 @@ const SignUpForm = () => {
       />
     </form>
   );
-}
+};
 
 export default SignUpForm;
