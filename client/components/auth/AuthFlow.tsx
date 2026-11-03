@@ -13,6 +13,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  FormValues,
   SIGN_IN_INITIAL_VALUES,
   SIGN_UP_INITIAL_VALUES,
   signInSchema,
@@ -29,9 +30,7 @@ function AuthForm({ mode }: AuthFormProps) {
   const isSignUp = mode === "signup";
 
   const schema = isSignUp ? signUpSchema : signInSchema;
-
-  type FormValues = z.infer<typeof schema>;
-
+  
   const {
     control,
     handleSubmit,
@@ -73,10 +72,10 @@ function AuthForm({ mode }: AuthFormProps) {
                 control={control}
                 render={({ field, fieldState }) => (
                   <TextInput
-                    label="Last Name"
-                    placeholder="Last name"
-                    {...field}
-                    error={fieldState.error?.message}
+                  label="Last Name"
+                  placeholder="Last name"
+                  {...field}
+                  error={fieldState.error?.message}
                   />
                 )}
               />

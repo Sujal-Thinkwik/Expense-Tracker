@@ -26,6 +26,8 @@ export const signUpSchema = z
 
 export type SignInFormValues = z.infer<typeof signInSchema>;
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
+export type FormValues = SignInFormValues | SignUpFormValues;
+
 
 export const SIGN_IN_INITIAL_VALUES: SignInFormValues = {
   email: "",
