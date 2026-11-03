@@ -7,9 +7,9 @@ import express, {
   type Response,
 } from "express";
 
-import { testConnection } from "./src/config/database.js";
-import { ensureUsersTableExists } from "./src/services/user.service.js";
-import authRoutes from "./src/routes/auth.routes.js";
+import { testConnection } from "./config/database.js";
+import { ensureUsersTableExists } from "./services/user.service.js";
+import authRoutes from "./routes/auth.routes.js";
 
 dotenv.config();
 
