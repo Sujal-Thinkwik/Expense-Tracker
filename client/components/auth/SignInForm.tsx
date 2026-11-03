@@ -16,19 +16,39 @@ import {
   SignInFormValues,
   signInSchema,
 } from "./auth.schema";
+import { useSignInMutation } from "@/services/auth.service";
+import { toast } from "sonner";
 
 const SignInForm = () => {
+  const [signIn, { isLoading: isSigningIn }] = useSignInMutation();
   const {
     control,
     handleSubmit,
     formState: { isSubmitting },
+    reset,
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: SIGN_IN_INITIAL_VALUES,
   });
 
   const onSubmit = async (values: SignInFormValues) => {
-    console.log({ values });
+    try {
+      const result = await signIn(values).unwrap();
+      toast.success(result?.message || "Signed in successfully");
+      reset();
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" && error !== null && "data" in error
+          ? (error as { data?: { message?: string } }).data?.message
+          : undefined;
+
+      toast.error(
+        errorMessage ||
+          (error instanceof Error
+            ? error.message
+            : "Something went wrong while signing up."),
+      );
+    }
   };
 
   return (
@@ -60,7 +80,12 @@ const SignInForm = () => {
           )}
         />
 
-        <Button type="submit" color="primary" fullWidth loading={isSubmitting}>
+        <Button
+          type="submit"
+          color="primary"
+          fullWidth
+          loading={isSigningIn || isSubmitting}
+        >
           Sign In
         </Button>
       </Stack>
@@ -81,6 +106,6 @@ const SignInForm = () => {
       />
     </form>
   );
-}
+};
 
 export default SignInForm;

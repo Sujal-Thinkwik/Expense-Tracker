@@ -25,7 +25,14 @@ const authApi = apiService.injectEndpoints({
         body,
       }),
     }),
+    signIn: builder.mutation<ApiResponse<any>, { email: string; password: string }>({
+      query: body => ({
+        url: "/auth/signin",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useSignUpMutation } = authApi;
+export const { useSignUpMutation, useSignInMutation } = authApi;

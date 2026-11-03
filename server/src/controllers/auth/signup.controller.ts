@@ -1,11 +1,11 @@
 import bcrypt from "bcryptjs";
 import type { Request, Response } from "express";
-import { createUser, findUserByEmail } from "../services/user.service.js";
-import { errorResponse, successResponse } from "../utils/apiResponse.js";
+import { createUser, findUserByEmail } from "../../services/user.service.js";
+import { errorResponse, successResponse } from "../../utils/apiResponse.js";
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
 
-export async function signupController(req: Request, res: Response): Promise<void> {
+export const signupController = async (req: Request, res: Response): Promise<void> => {
   try {
     const { firstName, lastName, email, password, confirmPassword } = req.body ?? {};
 
