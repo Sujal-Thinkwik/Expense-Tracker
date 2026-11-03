@@ -144,7 +144,7 @@ const SignUpForm = () => {
             <Text fz="xs">Already have an account?</Text>
             &nbsp;
             <Link href="/signin">
-              <Text fz="xs" c="primary">
+              <Text fz="xs" c="primary" fw={600}>
                 Sign in
               </Text>
             </Link>

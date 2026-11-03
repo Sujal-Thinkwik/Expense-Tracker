@@ -96,7 +96,7 @@ const SignInForm = () => {
             <Text fz="xs">Don&apos;t have an account?</Text>
             &nbsp;
             <Link href="/signup">
-              <Text fz="xs" c="primary">
+              <Text fz="xs" c="primary" fw={600}>
                 Sign up
               </Text>
             </Link>
