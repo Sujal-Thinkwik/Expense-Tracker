@@ -20,7 +20,6 @@ import {
   signUpSchema,
 } from "./auth.schema";
 import Link from "next/link";
-import { z } from "zod";
 
 type AuthFormProps = {
   mode: "signin" | "signup";
@@ -30,7 +29,7 @@ function AuthForm({ mode }: AuthFormProps) {
   const isSignUp = mode === "signup";
 
   const schema = isSignUp ? signUpSchema : signInSchema;
-  
+
   const {
     control,
     handleSubmit,
@@ -43,7 +42,7 @@ function AuthForm({ mode }: AuthFormProps) {
   });
 
   const onSubmit = async (values: FormValues) => {
-    console.log(values);
+    console.log({values});
   };
 
   return (
