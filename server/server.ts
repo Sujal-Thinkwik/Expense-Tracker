@@ -1,6 +1,7 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { type Express, type Request, type Response } from "express";
+import { testConnection } from "./src/config/database.js";
 
 dotenv.config();
 
@@ -13,6 +14,12 @@ app.use(express.json());
 app.get("/health", (_req: Request, res: Response) => {
   res.json({ status: "ok" });
 });
+
+const dbConnected = await testConnection();
+
+if (!dbConnected) {
+  console.warn("Server started without a PostgreSQL connection.");
+}
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
