@@ -1,18 +1,25 @@
 import bcrypt from "bcryptjs";
 import type { Request, Response } from "express";
-import { createUser, findUserByEmail } from "../../services/user.service.js";
+import { findUserByEmail } from "../../services/user.service.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  getTokenExpiry,
+} from "../../utils/jwt.js";
+
 import { errorResponse, successResponse } from "../../utils/apiResponse.js";
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
 
-export const signinController = async (req: Request, res: Response): Promise<void> => {
+export const signinController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { email, password } = req.body ?? {};
 
     if (!email || !password) {
-      res.status(400).json(
-        errorResponse("Email and password are required")
-      );
+      res.status(400).json(errorResponse("Email and password are required"));
       return;
     }
 
@@ -32,21 +39,33 @@ export const signinController = async (req: Request, res: Response): Promise<voi
       return;
     }
 
+    const accessToken = generateAccessToken(String(user.id));
+    const refreshToken = generateRefreshToken(String(user.id));
+    const tokenExpiry = getTokenExpiry();
+
     res.status(200).json(
       successResponse("User signed in successfully", {
-        id: user.id,
-        firstName: user.first_name,
-        lastName: user.last_name,
-        email: user.email,
-        createdAt: user.created_at,
-      })
+        user: {
+          id: user.id,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          email: user.email,
+          createdAt: user.created_at,
+        },
+        token: {
+          accessToken,
+          refreshToken,
+          tokenExpiry,
+        },
+      }),
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
 
     res.status(500).json(
-      errorResponse("Failed to sign in user", "INTERNAL_SERVER_ERROR", { message })
+      errorResponse("Failed to sign in user", "INTERNAL_SERVER_ERROR", {
+        message,
+      }),
     );
   }
-}
-       
+};
