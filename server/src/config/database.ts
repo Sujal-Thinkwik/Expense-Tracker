@@ -21,7 +21,7 @@ export async function query<T extends QueryResultRow = QueryResultRow>(
   const result = await pool.query<T>(text, params);
   return result;
 }
-
+ 
 export async function testConnection(): Promise<boolean> {
   try {
     const result = await pool.query("SELECT NOW() AS current_time");
